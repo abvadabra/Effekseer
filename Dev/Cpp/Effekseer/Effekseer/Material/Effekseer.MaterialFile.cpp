@@ -169,6 +169,53 @@ bool MaterialFile::Load(const uint8_t* data, int32_t size)
 				uniform.Index = type;
 				uniforms_.push_back(uniform);
 			}
+
+			if (version >= MaterialVersion17)
+			{
+				const auto loadGradient = [&](std::vector<GradientParameter>& gradients)
+				{
+					int gradientCount = 0;
+					memcpy(&gradientCount, data + offset, 4);
+					offset += sizeof(int);
+
+					for (auto i = 0; i < gradientCount; i++)
+					{
+						GradientParameter gradient;
+
+						int strNameLength = 0;
+						memcpy(&strNameLength, data + offset, 4);
+						offset += sizeof(int);
+
+						auto name = std::string((const char*)(data + offset));
+						offset += strNameLength;
+
+						int strUniformNameLength = 0;
+						memcpy(&strUniformNameLength, data + offset, 4);
+						offset += sizeof(int);
+
+						auto uniformName = std::string((const char*)(data + offset));
+						offset += strUniformNameLength;
+
+						gradient.Name = uniformName;
+
+						// offset
+						offset += sizeof(int);
+
+						// priority
+						offset += sizeof(int);
+
+						uint8_t* pos = const_cast<uint8_t*>(data + offset);
+						LoadGradient(gradient.Data, pos, 0);
+
+						offset += (pos - (data + offset));
+
+						gradients.emplace_back(gradient);
+					}
+				};
+
+				loadGradient(Gradients);
+				loadGradient(FixedGradients);
+			}
 		}
 		else if (std::string("GENE") == std::string(chunk))
 		{

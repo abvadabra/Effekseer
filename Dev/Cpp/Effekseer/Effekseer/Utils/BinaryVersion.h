@@ -27,6 +27,7 @@ const int32_t CompiledMaterialVersion162 = 1612;
 
 const int32_t MaterialVersion15 = 3;
 const int32_t MaterialVersion16 = 1610;
+const int32_t MaterialVersion17 = 1700;
 
 } // namespace Effekseer
 

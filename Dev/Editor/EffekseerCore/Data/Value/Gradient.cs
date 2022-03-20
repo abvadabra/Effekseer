@@ -83,15 +83,19 @@ namespace Effekseer.Data.Value
 		public State Value
 		{
 			get;
+		}
 
+		public State DefaultValue
+		{
+			get;
+			set;
 		}
 
 		public unsafe static XmlElement SaveToElement(XmlDocument doc, string element_name, object o, bool isClip)
 		{
 			var target = o as Gradient;
 
-			var defaultValue = CreateDefault();
-			if (target._value.Equals(defaultValue))
+			if (target._value.Equals(target.DefaultValue))
 			{
 				return null;
 			}
@@ -252,6 +256,7 @@ namespace Effekseer.Data.Value
 		public unsafe Gradient()
 		{
 			_value = CreateDefault();
+			DefaultValue = CreateDefault();
 		}
 
 		public State GetValue()
@@ -285,6 +290,11 @@ namespace Effekseer.Data.Value
 				isCombined);
 
 			Command.CommandManager.Execute(cmd);
+		}
+
+		public void SetValueDirectly(State value)
+		{
+			_value = (State)value.Clone();
 		}
 
 		protected void CallChanged(object value, ChangedValueType type)

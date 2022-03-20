@@ -45,6 +45,7 @@ namespace Effekseer.Utl
 		Version0 = 0,
 		Version15 = 3,
 		Version16 = 1610,
+		Version17 = 1700,
 	}
 
 	public enum CompiledMaterialVersion : int
@@ -151,13 +152,17 @@ namespace Effekseer.Utl
 
 	public class MaterialInformation
 	{
-		const MaterialVersion LatestSupportVersion = MaterialVersion.Version16;
+		const MaterialVersion LatestSupportVersion = MaterialVersion.Version17;
 
-		public MaterialVersion Version = MaterialVersion.Version16;
+		public MaterialVersion Version = MaterialVersion.Version17;
 
 		public TextureInformation[] Textures = new TextureInformation[0];
 
 		public UniformInformation[] Uniforms = new UniformInformation[0];
+
+		public GradientInformation[] Gradients = new GradientInformation[0];
+
+		public GradientInformation[] FixedGradients = new GradientInformation[0];
 
 		public CustomDataInformation[] CustomData = new CustomDataInformation[0];
 
@@ -365,6 +370,58 @@ namespace Effekseer.Utl
 					}
 
 					Uniforms = uniforms.ToArray();
+
+					if (version >= (int)MaterialVersion.Version17)
+					{
+						GradientInformation[] LoadGradient()
+						{
+							int gradientCount = 0;
+							reader.Get(ref gradientCount);
+
+							var gradients = new List<GradientInformation>();
+
+							for (int i = 0; i < gradientCount; i++)
+							{
+								var info = new GradientInformation();
+								info.Data = new Data.Value.Gradient.State();
+
+								reader.Get(ref info.Name, Encoding.UTF8);
+								reader.Get(ref info.UniformName, Encoding.UTF8);
+								reader.Get(ref info.Offset);
+								reader.Get(ref info.Priority);
+
+								int colorCount = 0;
+								reader.Get(ref colorCount);
+
+								info.Data.ColorMarkers = new Data.Value.Gradient.ColorMarker[colorCount];
+								for (int j = 0; j < colorCount; j++)
+								{
+									reader.Get(ref info.Data.ColorMarkers[j].Position);
+									reader.Get(ref info.Data.ColorMarkers[j].ColorR);
+									reader.Get(ref info.Data.ColorMarkers[j].ColorG);
+									reader.Get(ref info.Data.ColorMarkers[j].ColorB);
+									reader.Get(ref info.Data.ColorMarkers[j].Intensity);
+								}
+
+								int alphaCount = 0;
+								reader.Get(ref alphaCount);
+
+								info.Data.AlphaMarkers = new Data.Value.Gradient.AlphaMarker[alphaCount];
+								for (int j = 0; j < alphaCount; j++)
+								{
+									reader.Get(ref info.Data.AlphaMarkers[j].Position);
+									reader.Get(ref info.Data.AlphaMarkers[j].Alpha);
+								}
+
+								gradients.Add(info);
+							}
+
+							return gradients.ToArray();
+						}
+
+						Gradients = LoadGradient();
+						FixedGradients = LoadGradient();
+					}
 				}
 
 				if (buf[0] == 'P' &&
@@ -441,6 +498,30 @@ namespace Effekseer.Utl
 							reader.Get(ref desc, Encoding.UTF8);
 							Uniforms[j].Summaries.Add((Language)lang, name);
 							Uniforms[j].Descriptions.Add((Language)lang, desc);
+						}
+					}
+
+					if (version >= (int)MaterialVersion.Version17)
+					{
+						int gradientCount = 0;
+						reader.Get(ref gradientCount);
+
+						for (int j = 0; j < gradientCount; j++)
+						{
+							int count = 0;
+							reader.Get(ref count);
+
+							for (int i = 0; i < count; i++)
+							{
+								int lang = 0;
+								string name = null;
+								string desc = null;
+								reader.Get(ref lang);
+								reader.Get(ref name, Encoding.UTF8);
+								reader.Get(ref desc, Encoding.UTF8);
+								Gradients[j].Summaries.Add((Language)lang, name);
+								Gradients[j].Descriptions.Add((Language)lang, desc);
+							}
 						}
 					}
 				}
@@ -701,6 +782,19 @@ namespace Effekseer.Utl
 			public int Offset;
 			public int Type = 0;
 			public float[] DefaultValues = new float[4];
+			public int Priority = 1;
+
+			public Dictionary<Language, string> Summaries = new Dictionary<Language, string>();
+			public Dictionary<Language, string> Descriptions = new Dictionary<Language, string>();
+		}
+
+		public class GradientInformation
+		{
+			public string Name;
+			public string UniformName;
+			public int Offset;
+
+			public Data.Value.Gradient.State Data;
 			public int Priority = 1;
 
 			public Dictionary<Language, string> Summaries = new Dictionary<Language, string>();

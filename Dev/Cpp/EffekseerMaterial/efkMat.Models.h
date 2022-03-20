@@ -3,6 +3,7 @@
 
 #include "efkMat.Base.h"
 #include "efkMat.Utils.h"
+#include <optional>
 #include <set>
 
 namespace EffekseerMaterial
@@ -22,6 +23,46 @@ class UserObject
 public:
 	UserObject() = default;
 	virtual ~UserObject() = default;
+};
+
+class Gradient
+{
+public:
+	static const int MarkerMax = 8;
+
+	struct ColorMarker
+	{
+		float Position;
+		std::array<float, 3> Color;
+		float Intensity;
+	};
+
+	struct AlphaMarker
+	{
+		float Position;
+		float Alpha;
+	};
+
+	int ColorCount = 0;
+	int AlphaCount = 0;
+	std::array<ColorMarker, MarkerMax> Colors;
+	std::array<AlphaMarker, MarkerMax> Alphas;
+
+	Gradient()
+	{
+		for (auto& c : Colors)
+		{
+			c.Color.fill(1.0f);
+			c.Intensity = 1.0f;
+			c.Position = 0.0f;
+		}
+
+		for (auto& a : Alphas)
+		{
+			a.Alpha = 1.0f;
+			a.Position = 0.0f;
+		}
+	}
 };
 
 class Link
@@ -64,6 +105,8 @@ public:
 
 	//! Function
 	std::shared_ptr<Material> MaterialFunction;
+
+	std::optional<Gradient> Gradient;
 
 	std::weak_ptr<Node> Parent;
 };
@@ -196,7 +239,7 @@ enum class ErrorCode
 class Material : public std::enable_shared_from_this<Material>
 {
 private:
-	const int32_t lastestSupportedVersion_ = MaterialVersion16;
+	const int32_t lastestSupportedVersion_ = MaterialVersion17;
 
 	enum class SaveLoadAimType
 	{
