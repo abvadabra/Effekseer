@@ -60,7 +60,7 @@ struct StandardRendererState
 	std::array<std::array<float, 4>, 16> MaterialUniforms;
 
 	int32_t MaterialGradientCount = 0;
-	std::array<std::array<std::array<float, 4>, 13>, 2> MaterialGradients;
+	std::array<std::array<std::array<float, 4>, 13>, Effekseer::UserGradientSlotMax> MaterialGradients;
 
 	int32_t CustomData1Count = 0;
 	int32_t CustomData2Count = 0;

@@ -172,6 +172,8 @@ const int32_t UserTextureSlotMax = 6;
 //! the maximum number of uniform slot which can be specified by an user
 const int32_t UserUniformSlotMax = 16;
 
+const int32_t UserGradientSlotMax = 2;
+
 //! the maximum number of texture slot including textures system specified
 const int32_t TextureSlotMax = 8;
 
@@ -782,9 +784,6 @@ using SoundLoaderRef = RefPtr<SoundLoader>;
 using ModelLoaderRef = RefPtr<ModelLoader>;
 using CurveLoaderRef = RefPtr<CurveLoader>;
 using ProceduralModelGeneratorRef = RefPtr<ProceduralModelGenerator>;
-
-// TODO : Improve
-struct Gradient;
 
 /**
 	@brief	This object generates random values.
