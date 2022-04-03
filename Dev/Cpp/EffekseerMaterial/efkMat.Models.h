@@ -107,7 +107,7 @@ public:
 	std::shared_ptr<Material> MaterialFunction;
 
 	// TODO : it should uses optional
-	std::unique_ptr<Gradient> Gradient;
+	std::unique_ptr<Gradient> GradientData;
 
 	std::weak_ptr<Node> Parent;
 };

@@ -1553,25 +1553,25 @@ void Editor::UpdateParameterEditor(std::shared_ptr<Node> node)
 		}
 		else if (type == ValueType::Gradient)
 		{
-			assert(p->Gradient != nullptr);
+			assert(p->GradientData != nullptr);
 
 			ImGradientHDRState state;
 
-			state.ColorCount = p->Gradient->ColorCount;
+			state.ColorCount = p->GradientData->ColorCount;
 
 			for (int i = 0; i < state.ColorCount; i++)
 			{
-				state.Colors[i].Color = p->Gradient->Colors[i].Color;
-				state.Colors[i].Intensity = p->Gradient->Colors[i].Intensity;
-				state.Colors[i].Position = p->Gradient->Colors[i].Position;
+				state.Colors[i].Color = p->GradientData->Colors[i].Color;
+				state.Colors[i].Intensity = p->GradientData->Colors[i].Intensity;
+				state.Colors[i].Position = p->GradientData->Colors[i].Position;
 			}
 
-			state.AlphaCount = p->Gradient->AlphaCount;
+			state.AlphaCount = p->GradientData->AlphaCount;
 
 			for (int i = 0; i < state.AlphaCount; i++)
 			{
-				state.Alphas[i].Alpha = p->Gradient->Alphas[i].Alpha;
-				state.Alphas[i].Position = p->Gradient->Alphas[i].Position;
+				state.Alphas[i].Alpha = p->GradientData->Alphas[i].Alpha;
+				state.Alphas[i].Position = p->GradientData->Alphas[i].Position;
 			}
 
 			ImGradientHDRTemporaryState tempState;
@@ -1642,21 +1642,21 @@ void Editor::UpdateParameterEditor(std::shared_ptr<Node> node)
 			}
 
 			{
-				p->Gradient->ColorCount = state.ColorCount;
+				p->GradientData->ColorCount = state.ColorCount;
 
 				for (int i = 0; i < state.ColorCount; i++)
 				{
-					p->Gradient->Colors[i].Color = state.Colors[i].Color;
-					p->Gradient->Colors[i].Intensity = state.Colors[i].Intensity;
-					p->Gradient->Colors[i].Position = state.Colors[i].Position;
+					p->GradientData->Colors[i].Color = state.Colors[i].Color;
+					p->GradientData->Colors[i].Intensity = state.Colors[i].Intensity;
+					p->GradientData->Colors[i].Position = state.Colors[i].Position;
 				}
 
-				p->Gradient->AlphaCount = state.AlphaCount;
+				p->GradientData->AlphaCount = state.AlphaCount;
 
 				for (int i = 0; i < state.AlphaCount; i++)
 				{
-					p->Gradient->Alphas[i].Alpha = state.Alphas[i].Alpha;
-					p->Gradient->Alphas[i].Position = state.Alphas[i].Position;
+					p->GradientData->Alphas[i].Alpha = state.Alphas[i].Alpha;
+					p->GradientData->Alphas[i].Position = state.Alphas[i].Position;
 				}
 			}
 

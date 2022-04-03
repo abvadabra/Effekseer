@@ -579,9 +579,9 @@ std::string Material::SaveAsStrInternal(std::vector<std::shared_ptr<Node>> nodes
 				picojson::array colors;
 				picojson::array alphas;
 
-				for (int32_t i = 0; i < p->Gradient->ColorCount; i++)
+				for (int32_t i = 0; i < p->GradientData->ColorCount; i++)
 				{
-					const auto& c = p->Gradient->Colors[i];
+					const auto& c = p->GradientData->Colors[i];
 					picojson::object obj;
 					obj.insert(std::make_pair("R", picojson::value((double)c.Color[0])));
 					obj.insert(std::make_pair("G", picojson::value((double)c.Color[1])));
@@ -591,9 +591,9 @@ std::string Material::SaveAsStrInternal(std::vector<std::shared_ptr<Node>> nodes
 					colors.push_back(picojson::value(obj));
 				}
 
-				for (int32_t i = 0; i < p->Gradient->AlphaCount; i++)
+				for (int32_t i = 0; i < p->GradientData->AlphaCount; i++)
 				{
-					const auto& a = p->Gradient->Alphas[i];
+					const auto& a = p->GradientData->Alphas[i];
 					picojson::object obj;
 					obj.insert(std::make_pair("Alpha", picojson::value((double)a.Alpha)));
 					obj.insert(std::make_pair("Position", picojson::value((double)a.Position)));
@@ -905,8 +905,8 @@ void Material::LoadFromStrInternal(
 					g.Alphas[i].Position = static_cast<float>(prop_alphas[i].get("Position").get<double>());
 				}
 
-				node->Properties[i]->Gradient = std::make_unique<Gradient>();
-				*node->Properties[i]->Gradient = g;
+				node->Properties[i]->GradientData = std::make_unique<Gradient>();
+				*node->Properties[i]->GradientData = g;
 			}
 			else
 			{
@@ -1270,7 +1270,7 @@ std::shared_ptr<Node> Material::CreateNode(std::shared_ptr<NodeParameter> parame
 
 		if (parameter->Properties[i]->Type == ValueType::Gradient)
 		{
-			np->Gradient = std::make_unique<Gradient>();
+			np->GradientData = std::make_unique<Gradient>();
 		}
 
 		np->Parent = node;

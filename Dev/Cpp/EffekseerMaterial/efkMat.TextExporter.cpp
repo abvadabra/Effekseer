@@ -557,7 +557,7 @@ TextExporterResult TextExporter::Export(std::shared_ptr<Material> material, std:
 						extractedGradient = std::make_shared<TextExporterGradient>();
 						extractedGradient->IsFixed = true;
 						extractedGradient->GUID = node->GUID;
-						extractedGradient->Defaults = *node->GetProperty("Gradient")->Gradient;
+						extractedGradient->Defaults = *node->GetProperty("Gradient")->GradientData;
 						extractedGradients[node->GUID] = extractedGradient;
 					}
 					else if (node->Parameter->Type == NodeType::GradientParameter)
@@ -569,7 +569,7 @@ TextExporterResult TextExporter::Export(std::shared_ptr<Material> material, std:
 						extractedGradient->Priority = static_cast<int32_t>(node->GetProperty("Priority")->Floats[0]);
 						extractedGradient->Descriptions = node->Descriptions;
 						extractedGradient->GUID = node->GUID;
-						extractedGradient->Defaults = *node->GetProperty("Gradient")->Gradient;
+						extractedGradient->Defaults = *node->GetProperty("Gradient")->GradientData;
 						extractedGradients[node->GUID] = extractedGradient;
 					}
 				}
@@ -720,7 +720,7 @@ TextExporterResult TextExporter::Export(std::shared_ptr<Material> material, std:
 					{
 						extractedGradient = std::make_shared<TextExporterGradient>();
 						extractedGradient->IsFixed = true;
-						extractedGradient->Defaults = *node->GetProperty("Gradient")->Gradient;
+						extractedGradient->Defaults = *node->GetProperty("Gradient")->GradientData;
 						extractedGradient->GUID = node->GUID;
 						extractedGradients[node->GUID] = extractedGradient;
 					}
