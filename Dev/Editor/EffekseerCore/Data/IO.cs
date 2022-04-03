@@ -190,6 +190,7 @@ namespace Effekseer.Data
 			var e_float3 = doc.CreateElement("Float3");
 			var e_float4 = doc.CreateElement("Float4");
 			var e_texture = doc.CreateElement("Texture");
+			var e_gradient = doc.CreateElement("Gradient");
 
 
 			// check file info
@@ -280,6 +281,32 @@ namespace Effekseer.Data
 							e_root.AppendChild(v_k);
 							e_root.AppendChild(v_e);
 							e_texture.AppendChild(e_root);
+						}
+					}
+				}
+
+				var gradients = mfp.GetGradients(info);
+				foreach (var kv in gradients)
+				{
+					var status = kv.Item1;
+
+					if (status == null)
+						continue;
+
+					if (!status.IsShown)
+						continue;
+
+					if (status.Value is Data.Value.Gradient)
+					{
+						var v = status.Value as Data.Value.Gradient;
+						var v_k = doc.CreateTextElement("Key", status.Key.ToString());
+						var v_e = SaveObjectToElement(doc, "Value", v, isClip);
+						if (v_e != null)
+						{
+							var e_root = doc.CreateElement("KeyValue");
+							e_root.AppendChild(v_k);
+							e_root.AppendChild(v_e);
+							e_gradient.AppendChild(e_root);
 						}
 					}
 				}
@@ -385,6 +412,12 @@ namespace Effekseer.Data
 			{
 				e.AppendChild(e_texture);
 			}
+
+			if (e_gradient.ChildNodes.Count > 0)
+			{
+				e.AppendChild(e_gradient);
+			}
+
 
 			return e.ChildNodes.Count > 0 ? e : null;
 		}
@@ -1029,6 +1062,7 @@ namespace Effekseer.Data
 			var e_float3 = e["Float3"] as XmlElement;
 			var e_float4 = e["Float4"] as XmlElement;
 			var e_texture = e["Texture"] as XmlElement;
+			var e_gradient = e["Gradient"] as XmlElement;
 
 			if (e_float1 != null)
 			{
@@ -1196,6 +1230,32 @@ namespace Effekseer.Data
 					{
 						var v = vs.Value as Value.PathForImage;
 						LoadFromElement(valueElement, v, isClip);
+					}
+				}
+			}
+
+			if (e_gradient != null)
+			{
+				for (var i = 0; i < e_gradient.ChildNodes.Count; i++)
+				{
+					var e_child = e_gradient.ChildNodes[i] as XmlElement;
+
+					string key = string.Empty;
+
+					var e_k = e_child["Key"] as XmlElement;
+					var valueElement = e_child["Value"] as XmlElement;
+
+					if (e_k != null)
+					{
+						key = e_k.GetText();
+					}
+
+
+					var vs = mfp.FindValue(key, null, false);
+					if (vs != null)
+					{
+						var v = vs.Value;
+						LoadObjectFromElement(valueElement, ref v, isClip);
 					}
 				}
 			}
