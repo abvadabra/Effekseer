@@ -354,7 +354,7 @@ struct ParameterRendererCommon
 				}
 				pos += (sizeof(float) * 4 * uniforms);
 
-				if (version >= Version17Alpha2)
+				if (version >= Version17Alpha3)
 				{
 					int gradients = 0;
 					memcpy(&gradients, pos, sizeof(int));

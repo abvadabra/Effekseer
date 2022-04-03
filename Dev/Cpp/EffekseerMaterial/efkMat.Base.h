@@ -26,7 +26,8 @@ const int32_t CompiledMaterialVersion16 = 1610;
 
 const int32_t MaterialVersion15 = 3;
 const int32_t MaterialVersion16 = 1610;
-const int32_t MaterialVersion17 = 1700;
+const int32_t MaterialVersion17Alpha2 = 1700;
+const int32_t MaterialVersion17Alpha3 = 1703;
 
 enum class TextureValueType
 {

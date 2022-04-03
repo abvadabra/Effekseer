@@ -117,7 +117,7 @@ namespace Effekseer.Binary.RenderData
 				aggregator.AddFloat(floats[3]);
 			}
 
-			if (version >= ExporterVersion.Ver17Alpha2)
+			if (version >= ExporterVersion.Ver17Alpha3)
 			{
 				var gradients = value.MaterialFile.GetGradients(materialInfo);
 

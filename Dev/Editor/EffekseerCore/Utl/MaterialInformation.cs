@@ -45,7 +45,8 @@ namespace Effekseer.Utl
 		Version0 = 0,
 		Version15 = 3,
 		Version16 = 1610,
-		Version17 = 1700,
+		Version17Alpha2 = 1700,
+		Version17Alpha3 = 1703,
 	}
 
 	public enum CompiledMaterialVersion : int
@@ -152,9 +153,9 @@ namespace Effekseer.Utl
 
 	public class MaterialInformation
 	{
-		const MaterialVersion LatestSupportVersion = MaterialVersion.Version17;
+		const MaterialVersion LatestSupportVersion = MaterialVersion.Version17Alpha3;
 
-		public MaterialVersion Version = MaterialVersion.Version17;
+		public MaterialVersion Version = MaterialVersion.Version17Alpha3;
 
 		public TextureInformation[] Textures = new TextureInformation[0];
 
@@ -371,7 +372,7 @@ namespace Effekseer.Utl
 
 					Uniforms = uniforms.ToArray();
 
-					if (version >= (int)MaterialVersion.Version17)
+					if (version >= (int)MaterialVersion.Version17Alpha3)
 					{
 						GradientInformation[] LoadGradient()
 						{
@@ -501,7 +502,7 @@ namespace Effekseer.Utl
 						}
 					}
 
-					if (version >= (int)MaterialVersion.Version17)
+					if (version >= (int)MaterialVersion.Version17Alpha3)
 					{
 						int gradientCount = 0;
 						reader.Get(ref gradientCount);

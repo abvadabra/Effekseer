@@ -170,7 +170,7 @@ bool MaterialFile::Load(const uint8_t* data, int32_t size)
 				uniforms_.push_back(uniform);
 			}
 
-			if (version >= MaterialVersion17)
+			if (version >= MaterialVersion17Alpha3)
 			{
 				const auto loadGradient = [&](std::vector<GradientParameter>& gradients)
 				{
