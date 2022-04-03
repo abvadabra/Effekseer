@@ -905,7 +905,8 @@ void Material::LoadFromStrInternal(
 					g.Alphas[i].Position = static_cast<float>(prop_alphas[i].get("Position").get<double>());
 				}
 
-				node->Properties[i]->Gradient = g;
+				node->Properties[i]->Gradient = std::make_unique<Gradient>();
+				*node->Properties[i]->Gradient = g;
 			}
 			else
 			{
@@ -1269,7 +1270,7 @@ std::shared_ptr<Node> Material::CreateNode(std::shared_ptr<NodeParameter> parame
 
 		if (parameter->Properties[i]->Type == ValueType::Gradient)
 		{
-			np->Gradient = Gradient{};
+			np->Gradient = std::make_unique<Gradient>();
 		}
 
 		np->Parent = node;

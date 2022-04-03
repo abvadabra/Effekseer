@@ -3,7 +3,7 @@
 
 #include "efkMat.Base.h"
 #include "efkMat.Utils.h"
-#include <optional>
+#include <memory>
 #include <set>
 
 namespace EffekseerMaterial
@@ -106,7 +106,8 @@ public:
 	//! Function
 	std::shared_ptr<Material> MaterialFunction;
 
-	std::optional<Gradient> Gradient;
+	// TODO : it should uses optional
+	std::unique_ptr<Gradient> Gradient;
 
 	std::weak_ptr<Node> Parent;
 };

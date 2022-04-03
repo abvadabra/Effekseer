@@ -1553,7 +1553,7 @@ void Editor::UpdateParameterEditor(std::shared_ptr<Node> node)
 		}
 		else if (type == ValueType::Gradient)
 		{
-			assert(p->Gradient.has_value());
+			assert(p->Gradient != nullptr);
 
 			ImGradientHDRState state;
 
