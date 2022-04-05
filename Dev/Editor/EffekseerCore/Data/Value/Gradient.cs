@@ -29,6 +29,31 @@ namespace Effekseer.Data.Value
 			public ColorMarker[] ColorMarkers;
 			public AlphaMarker[] AlphaMarkers;
 
+			public unsafe byte[] ToBinary()
+			{
+				List<byte[]> data = new List<byte[]>();
+				data.Add(BitConverter.GetBytes(ColorMarkers.Length));
+
+				for (int i = 0; i < ColorMarkers.Length; i++)
+				{
+					data.Add(BitConverter.GetBytes(ColorMarkers[i].Position));
+					data.Add(BitConverter.GetBytes(ColorMarkers[i].ColorR));
+					data.Add(BitConverter.GetBytes(ColorMarkers[i].ColorG));
+					data.Add(BitConverter.GetBytes(ColorMarkers[i].ColorB));
+					data.Add(BitConverter.GetBytes(ColorMarkers[i].Intensity));
+				}
+
+				data.Add(BitConverter.GetBytes(AlphaMarkers.Length));
+
+				for (int i = 0; i < AlphaMarkers.Length; i++)
+				{
+					data.Add(BitConverter.GetBytes(AlphaMarkers[i].Position));
+					data.Add(BitConverter.GetBytes(AlphaMarkers[i].Alpha));
+				}
+
+				return data.SelectMany(_ => _).ToArray();
+			}
+
 			public object Clone()
 			{
 				var state = new State();
@@ -159,27 +184,7 @@ namespace Effekseer.Data.Value
 
 		public unsafe byte[] ToBinary()
 		{
-			List<byte[]> data = new List<byte[]>();
-			data.Add(BitConverter.GetBytes(_value.ColorMarkers.Length));
-
-			for (int i = 0; i < _value.ColorMarkers.Length; i++)
-			{
-				data.Add(BitConverter.GetBytes(_value.ColorMarkers[i].Position));
-				data.Add(BitConverter.GetBytes(_value.ColorMarkers[i].ColorR));
-				data.Add(BitConverter.GetBytes(_value.ColorMarkers[i].ColorG));
-				data.Add(BitConverter.GetBytes(_value.ColorMarkers[i].ColorB));
-				data.Add(BitConverter.GetBytes(_value.ColorMarkers[i].Intensity));
-			}
-
-			data.Add(BitConverter.GetBytes(_value.AlphaMarkers.Length));
-
-			for (int i = 0; i < _value.AlphaMarkers.Length; i++)
-			{
-				data.Add(BitConverter.GetBytes(_value.AlphaMarkers[i].Position));
-				data.Add(BitConverter.GetBytes(_value.AlphaMarkers[i].Alpha));
-			}
-
-			return data.SelectMany(_ => _).ToArray();
+			return _value.ToBinary();
 		}
 
 		static Gradient()

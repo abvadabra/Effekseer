@@ -642,6 +642,23 @@ namespace Effekseer.Utl
 					bw.Push(info.DefaultValues[3]);
 				}
 
+				void SaveGradient(GradientInformation[] infos)
+				{
+					bw.Push(infos.Length);
+
+					foreach (var info in infos)
+					{
+						bw.Push(info.Name, Encoding.UTF8);
+						bw.Push(info.UniformName, Encoding.UTF8);
+						bw.Push(info.Offset);
+						bw.Push(info.Priority);
+						bw.PushDirectly(info.Data.ToBinary());
+					}
+				}
+
+				SaveGradient(Gradients);
+				SaveGradient(FixedGradients);
+
 				var binary = bw.GetBinary();
 				writer.Write(Encoding.ASCII.GetBytes("PRM_"));
 				writer.Write(binary.Length);
@@ -687,6 +704,19 @@ namespace Effekseer.Utl
 						bw.Push((int)key);
 						bw.Push(uniform.Summaries[key], Encoding.UTF8);
 						bw.Push(uniform.Descriptions[key], Encoding.UTF8);
+					}
+				}
+
+				bw.Push(Gradients.Length);
+				foreach (var gradient in Gradients)
+				{
+					bw.Push(gradient.Summaries.Count);
+					var keys = gradient.Summaries.Keys.ToArray();
+					foreach (var key in keys)
+					{
+						bw.Push((int)key);
+						bw.Push(gradient.Summaries[key], Encoding.UTF8);
+						bw.Push(gradient.Descriptions[key], Encoding.UTF8);
 					}
 				}
 
